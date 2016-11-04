@@ -1,0 +1,19 @@
+{
+  "name": "nbaplays",
+  "version": "0.0.1",
+  "main": "js/index.js",
+  "scripts": {
+    "server": "python -m http.server 8000",
+    "build": "rollup --format umd -n nba --banner '/* eslint-disable */' -o js/app.js -- js/index.js",
+    "watch": "rollup --watch --format umd -n nba --banner '/* eslint-disable */' -o js/app.js -- js/index.js"
+  },
+  "author": "Justin Palmer",
+  "dependencies": {
+    "d3": "4.3.0"
+  },
+
+  "devDependencies": {
+    "rollup": "0.36",
+    "rollup-watch": "2.5.0"
+  }
+}

@@ -5,7 +5,8 @@
   "scripts": {
     "server": "python -m http.server 8000",
     "build": "rollup --format umd -n nba --banner '/* eslint-disable */' -o js/app.js -- js/index.js",
-    "watch": "rollup --watch --format umd -n nba --banner '/* eslint-disable */' -o js/app.js -- js/index.js"
+    "watch": "rollup --watch --format umd -n nba --banner '/* eslint-disable */' -o js/app.js -- js/index.js",
+    "update-data": "psql -c 'copy(select * from play_types) to stdout  with csv header' nba_team_playtypes > data/types.csv"
   },
   "author": "Justin Palmer",
   "dependencies": {

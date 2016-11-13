@@ -18,6 +18,7 @@ export default function stream(el, data) {
 
     totals.empty = totals.possg - totals.fgag
 
+    particleTypes.set("empty", totals.empty)
     plays.forEach(play => {
       const type = play.file.toLowerCase()
       particleTypes.set(type, Math.round(play.fgmg))
@@ -30,13 +31,22 @@ export default function stream(el, data) {
       for (let i = 0; i < v; i++) {
         const rx = randomX()
         const ry = randomY()
+        let fill = "hsl(104, 60%, 42%)"
+
+        if(k.match(/miss$/)) {
+          fill = "hsl(0, 71%, 46%)"
+        } else if(k == "empty") {
+          fill = "rgba(100, 100, 100, 1)"
+        }
+
         particles.push({
           x: rx,
           y: ry,
-          l: Math.random(),
+          l: Math.random() + 1,
           xs: 0,
           ys: Math.random() * 4,
-          type: k
+          type: k,
+          fill: fill
         })
       }
     })
@@ -57,7 +67,6 @@ export default function stream(el, data) {
 
   teams.sort((a, b) => d3.descending(a.value.totals.possg, b.value.totals.possg))
 
-  console.log(teams);
   // Create a canvas surface to represent each team
   const containers = d3.select(el).selectAll(".surface")
     .data(teams)
@@ -92,6 +101,7 @@ export default function stream(el, data) {
       ctx.beginPath()
       ctx.moveTo(p.x, p.y)
       ctx.lineTo(p.x + p.l * p.xs, p.y + p.l * p.ys)
+      ctx.strokeStyle = p.fill
       ctx.stroke()
 
       p.x += p.xs
@@ -103,7 +113,6 @@ export default function stream(el, data) {
       }
     }
   }
-
 
   // The timer
   const timer = d3.timer((elapsed) => {

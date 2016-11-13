@@ -1,4 +1,5 @@
 import parallel from "./parallel.js"
+import stream from "./stream.js"
 
 function format(row) {
   for (let key of Object.keys(row)) {
@@ -13,7 +14,8 @@ function format(row) {
 }
 
 
-d3.csv("data/types.csv", format, function(err, data) {
-  if(err) return alert(err)
-  parallel(".js-parallel", data)
+d3.csv("data/plays.csv", format, (err, data) => {
+  if(err) return console.log(err)
+  // parallel(".js-parallel", data)
+  stream(".js-stream", data)
 })

@@ -1,4 +1,4 @@
-export default function foo(target, data) {
+export default function parallel(target, data) {
   let el = d3.select(target)
   let ewidth = parseFloat(el.style("width"))
   let eheight = parseFloat(el.style("height"))
@@ -10,8 +10,8 @@ export default function foo(target, data) {
   let stat = "time"
 
   let splits = d3.nest()
-    .key((d) => { return d.name })
-    .key((d) => { return d.teamnameabbreviation })
+    .key(d => d.name )
+    .key(d => d.teamnameabbreviation)
     .rollup((types) => {
       let obj = {}
       types.forEach((t) => { obj[t.file] = t[stat] })
@@ -24,7 +24,7 @@ export default function foo(target, data) {
     "PRBallHandler", "Spotup", "Transition", "Postup", "Misc"]
 
   let frequencyMin = 0
-  let frequencyMax = d3.max(data, (d) => { return d[stat] })
+  let frequencyMax = d3.max(data, d => d[stat])
 
   let xgrid = d3.scaleBand()
     .domain(categories)
@@ -79,7 +79,7 @@ export default function foo(target, data) {
     .selectAll(".tick")
     .attr("class", "x tick")
 
-  let types = offdef.selectAll(".type")
+  offdef.selectAll(".type")
     .data(playTypes)
   .enter().append("g")
     .attr("class", (d, i) => { return "axis axis-" + i })

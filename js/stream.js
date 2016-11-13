@@ -8,31 +8,43 @@ export default function stream(el, data) {
   const randomY = d3.randomUniform(0, surfaceHeight)
 
   function rollup(plays) {
+    const particleTypes = d3.map()
     const totals = plays.reduce((a, b) => {
       a.possg += Math.round(b.possg * 100 / 100.0)
       a.fgag += Math.round(b.fgag * 100 / 100.0)
-      return a }, { possg: 0, fgag: 0 })
+      a.fgmg += Math.round(b.fgmg * 100 / 100.0)
+
+      return a }, { possg: 0, fgag: 0, fgmg: 0 })
 
     totals.empty = totals.possg - totals.fgag
 
+    plays.forEach(play => {
+      const type = play.file.toLowerCase()
+      particleTypes.set(type, Math.round(play.fgmg))
+      particleTypes.set(type + "-miss", Math.round(play.fgag - play.fgmg))
+    })
+
     let particles = []
-    for (let i = 0; i < totals.possg; i++) {
-      const rx = randomX()
-      const ry = randomY()
-      particles.push({
-        x: rx,
-        y: ry,
-        l: Math.random(),
-        xs: 0,
-        ys: Math.random() * 4,
-        type: "poss"
-      })
-    }
+
+    particleTypes.each((v, k) => {
+      for (let i = 0; i < v; i++) {
+        const rx = randomX()
+        const ry = randomY()
+        particles.push({
+          x: rx,
+          y: ry,
+          l: Math.random(),
+          xs: 0,
+          ys: Math.random() * 4,
+          type: k
+        })
+      }
+    })
 
     return {
       totals: totals,
       plays: plays,
-      particles: particles
+      particles: d3.shuffle(particles)
     }
   }
 
@@ -45,6 +57,7 @@ export default function stream(el, data) {
 
   teams.sort((a, b) => d3.descending(a.value.totals.possg, b.value.totals.possg))
 
+  console.log(teams);
   // Create a canvas surface to represent each team
   const containers = d3.select(el).selectAll(".surface")
     .data(teams)
@@ -88,11 +101,7 @@ export default function stream(el, data) {
         p.x = randomX()
         p.y = -5
       }
-
-      // ctx.arc(p.x, p.y, radius, 0, 2 * Math.PI)
-      // ctx.fill()
     }
-
   }
 
 

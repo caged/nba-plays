@@ -50,6 +50,17 @@ body {
 
 .surface {
   display: inline-block;
+  position: relative;
   margin: 5px;
   border: 1px solid #eee;
+}
+
+.team-name {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font: 10px Helvetica, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;;
+  color: tomato;
 }
